@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+
+# Android build artifacts (keep source, not compiled outputs)
+android/app/build/
+android/.gradle/
+android/build/
+*.apk
+
+# iOS build artifacts  
+ios/App/build/
+ios/DerivedData/
+*.ipa
+*.xcarchive
+
+# Environment files
+.env
+.env.local
+
+# Editor
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*

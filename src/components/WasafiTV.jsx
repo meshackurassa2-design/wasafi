@@ -4,10 +4,9 @@ import { Play, Pause, Maximize, Volume2, Settings, MessageSquare, Heart, Share2 
 const WasafiTV = () => {
   return (
     <div className="fade-in" style={{ paddingBottom: '140px' }}>
-      {/* Video Player Mockup */}
-      <div style={{ width: '100%', position: 'sticky', top: '70px', zIndex: 100, backgroundColor: 'black', boxShadow: '0 10px 30px rgba(0,0,0,0.8)' }}>
+      {/* Video Player Section */}
+      <div id="video-container" style={{ width: '100%', position: 'sticky', top: '70px', zIndex: 100, backgroundColor: 'black', boxShadow: '0 10px 30px rgba(0,0,0,0.8)' }}>
         <div className="aspect-video" style={{ position: 'relative', width: '100%', backgroundColor: '#000' }}>
-            {/* Direct interview image used as mockup video background */}
             <img src="https://img.youtube.com/vi/qG5Ktb0lYsI/maxresdefault.jpg" style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Live TV" />
             
             {/* Live Indicator */}
@@ -25,7 +24,7 @@ const WasafiTV = () => {
                 </div>
                 <div style={{ display: 'flex', gap: '15px' }}>
                     <button><Settings color="white" size={20} /></button>
-                    <button><Maximize color="white" size={20} /></button>
+                    <button onClick={() => document.getElementById('video-container').requestFullscreen()}><Maximize color="white" size={20} /></button>
                 </div>
             </div>
         </div>
@@ -45,32 +44,33 @@ const WasafiTV = () => {
             </button>
          </div>
 
-         {/* Mock Chat */}
-         <div className="glass-morphism" style={{ borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)', height: '350px', display: 'flex', flexDirection: 'column' }}>
-            <div style={{ padding: '15px', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <MessageSquare size={18} color="var(--primary-red)" />
-                <h3 style={{ fontSize: '14px', fontWeight: 700 }}>Live Chat</h3>
-            </div>
-            
-            <div style={{ flex: 1, padding: '15px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+         {/* Show Description Section */}
+         <div className="glass-morphism" style={{ borderRadius: '16px', padding: '20px', marginBottom: '30px', border: '1px solid rgba(255,255,255,0.05)' }}>
+            <h3 style={{ fontSize: '16px', fontWeight: 800, marginBottom: '10px', color: 'var(--primary-red)' }}>SHOW DESCRIPTION</h3>
+            <p style={{ fontSize: '14px', lineHeight: '1.6', color: 'rgba(255,255,255,0.8)' }}>
+               In this highly anticipated exclusive interview, the King of Bongo Flava, Diamond Platnumz, sits down with Wasafi Media to discuss his global musical journey, upcoming album, and the future of WCB Wasafi. He breaks his silence on recent controversies and shares his vision for the East African music industry on the world stage.
+            </p>
+         </div>
+
+         {/* Up Next Section */}
+         <div style={{ marginBottom: '20px' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: 800, marginBottom: '15px' }}>UP NEXT</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
                 {[
-                    { user: 'Juma55', msg: '🔥🔥 Simba amewasha moto!', color: '#E11D48' },
-                    { user: 'BongoFan', msg: 'Tunakusikiliza mkuu tupo pamoja', color: '#3B82F6' },
-                    { user: 'Salma_K', msg: 'The best interview so far 👏🏾', color: '#10B981' },
-                    { user: 'WasafiDieHard', msg: 'WCB For Life!! 🌍 Number one', color: '#F59E0B' },
-                    { user: 'Mangi', msg: 'Chibu Dangote 🦁', color: '#8B5CF6' },
-                ].map((chat, i) => (
-                    <div key={i} style={{ fontSize: '13px', lineHeight: 1.4 }}>
-                        <span style={{ color: chat.color, fontWeight: 700, marginRight: '8px' }}>{chat.user}</span>
-                        <span style={{ color: 'var(--text-white)' }}>{chat.msg}</span>
+                    { title: "Zuchu: Behind the Scenes of 'Honey'", duration: "15:20", thumb: "https://images.unsplash.com/photo-1516280440614-37939bbacd81?q=80&w=2070&auto=format&fit=crop" },
+                    { title: "Wasafi FM: The morning blast live recap", duration: "10:45", thumb: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=2070&auto=format&fit=crop" },
+                ].map((item) => (
+                    <div key={item.title} className="glass-morphism" style={{ display: 'flex', gap: '15px', padding: '10px', borderRadius: '12px', alignItems: 'center' }}>
+                        <div style={{ width: '100px', height: '60px', borderRadius: '8px', overflow: 'hidden', flexShrink: 0 }}>
+                            <img src={item.thumb} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        </div>
+                        <div style={{ flex: 1 }}>
+                            <div style={{ fontSize: '14px', fontWeight: 700, lineHeight: '1.2', color: 'white', marginBottom: '4px' }}>{item.title}</div>
+                            <div style={{ fontSize: '11px', color: 'var(--text-gray)' }}>{item.duration}</div>
+                        </div>
+                        <Play size={16} color="var(--primary-red)" style={{ marginRight: '5px' }} />
                     </div>
                 ))}
-            </div>
-
-            <div style={{ padding: '10px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-                <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '20px', padding: '10px 15px', display: 'flex', alignItems: 'center' }}>
-                    <input type="text" placeholder="Chat publicly as guest..." style={{ background: 'transparent', border: 'none', color: 'white', outline: 'none', flex: 1, fontSize: '13px' }} disabled />
-                </div>
             </div>
          </div>
       </div>

@@ -36,31 +36,49 @@ const Home = ({ artists, trendingShows }) => {
           </div>
         </section>
 
-        <section style={{ padding: '30px 20px' }}>
-          <h3 style={{ fontSize: '18px', fontWeight: 900, marginBottom: '20px', textTransform: 'uppercase', color: 'var(--primary-red)', letterSpacing: '1px' }}>Top Tanzanian Artists</h3>
-          <div style={{ display: 'flex', gap: '25px', overflowX: 'auto', paddingBottom: '10px' }} className="no-scrollbar">
-            {artists.map((art, i) => <ArtistCircle key={i} {...art} />)}
+        <section style={{ padding: '20px 0 10px 20px' }}>
+          <div style={{ display: 'flex', gap: '15px', overflowX: 'auto', paddingBottom: '10px' }} className="no-scrollbar">
+            {artists.map((art) => (
+              <motion.div key={`story-${art.id}`} whileTap={{ scale: 0.9 }} style={{ flexShrink: 0, textAlign: 'center' }}>
+                <div style={{ width: '68px', height: '68px', borderRadius: '50%', padding: '2px', background: 'linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)', marginBottom: '6px' }}>
+                  <div style={{ width: '100%', height: '100%', borderRadius: '50%', border: '2px solid var(--bg-black)', overflow: 'hidden' }}>
+                    <img src={art.image} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt={art.name} />
+                  </div>
+                </div>
+                <div style={{ fontSize: '10px', fontWeight: 800, color: 'white', textTransform: 'uppercase' }}>{art.name.split(' ')[0]}</div>
+              </motion.div>
+            ))}
           </div>
         </section>
 
-        <section style={{ padding: '30px 20px 10px' }}>
+        <section style={{ padding: '20px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+             <h3 style={{ fontSize: '18px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '1px' }}>Top Tanzanian Artists</h3>
+             <span style={{ color: 'var(--primary-red)', fontSize: '12px', fontWeight: 800, letterSpacing: '1px' }}>EXPLORE</span>
+          </div>
+          <div style={{ display: 'flex', gap: '25px', overflowX: 'auto', paddingBottom: '10px' }} className="no-scrollbar">
+            {artists.map((art) => <ArtistCircle key={art.id} {...art} />)}
+          </div>
+        </section>
+
+        <section style={{ padding: '20px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '20px' }}>
-             <h3 style={{ fontSize: '20px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Trending Now</h3>
-             <span style={{ color: 'var(--primary-red)', fontSize: '12px', fontWeight: 800, cursor: 'pointer', paddingBottom: '3px' }}>SEE ALL</span>
+             <h3 style={{ fontSize: '18px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '1px' }}>Trending Now</h3>
+             <span style={{ color: 'var(--primary-red)', fontSize: '12px', fontWeight: 800, cursor: 'pointer' }}>SEE ALL</span>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {trendingShows.map((vid, i) => (
-              <motion.div key={i} whileHover={{ x: 6, backgroundColor: 'rgba(255,255,255,0.03)' }} whileTap={{ scale: 0.98 }} style={{ display: 'flex', gap: '15px', alignItems: 'center', cursor: 'pointer', padding: '10px', borderRadius: '12px', background: i === 0 ? 'linear-gradient(90deg, rgba(225,29,72,0.1), transparent)' : 'transparent', border: i === 0 ? '1px solid rgba(225,29,72,0.2)' : '1px solid transparent', transition: 'all 0.3s ease' }}>
-                <div style={{ width: '155px', height: '90px', borderRadius: '10px', overflow: 'hidden', position: 'relative', flexShrink: 0, boxShadow: '0 4px 15px rgba(0,0,0,0.3)' }}>
+              <motion.div key={vid.id} layout whileHover={{ x: 6, backgroundColor: 'rgba(255,255,255,0.03)' }} whileTap={{ scale: 0.98 }} style={{ display: 'flex', gap: '15px', padding: '10px', borderRadius: '16px', background: i === 0 ? 'linear-gradient(90deg, rgba(225,29,72,0.1), transparent)' : 'rgba(255,255,255,0.03)', border: i === 0 ? '1px solid rgba(225,29,72,0.2)' : '1px solid rgba(255,255,255,0.05)', transition: 'all 0.3s ease' }}>
+                <div style={{ width: '140px', height: '80px', borderRadius: '12px', overflow: 'hidden', position: 'relative', flexShrink: 0, boxShadow: '0 4px 15px rgba(0,0,0,0.3)', backgroundColor: '#111' }}>
                   <img src={vid.thumb} onError={(e) => { e.target.onerror = null; e.target.src = vid.thumb.replace('maxresdefault', 'hqdefault'); }} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt={vid.title} />
-                  <div style={{ position: 'absolute', bottom: '6px', right: '6px', background: vid.isLive ? 'var(--primary-red)' : 'rgba(15,15,15,0.85)', fontSize: '10px', fontWeight: 800, padding: '4px 8px', borderRadius: '4px', letterSpacing: '0.5px', backdropFilter: 'blur(4px)', boxShadow: vid.isLive ? '0 0 10px rgba(225,29,72,0.5)' : 'none' }}>
-                     {vid.isLive && <span className="pulse" style={{ display: 'inline-block', width: '4px', height: '4px', borderRadius: '50%', backgroundColor: 'white', marginRight: '6px', verticalAlign: 'middle' }}></span>}
+                  <div style={{ position: 'absolute', bottom: '6px', right: '6px', background: vid.isLive ? 'var(--primary-red)' : 'rgba(15,15,15,0.85)', fontSize: '9px', fontWeight: 900, padding: '3px 6px', borderRadius: '4px', letterSpacing: '0.5px' }}>
+                     {vid.isLive && <span className="pulse" style={{ display: 'inline-block', width: '4px', height: '4px', borderRadius: '50%', backgroundColor: 'white', marginRight: '4px', verticalAlign: 'middle' }}></span>}
                      {vid.duration}
                   </div>
                 </div>
                 <div style={{ flex: 1, paddingRight: '5px' }}>
-                  <div style={{ fontSize: '15px', fontWeight: 800, marginBottom: '6px', lineHeight: 1.3, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', color: i === 0 ? 'white' : 'var(--text-gray)' }}>{vid.title}</div>
-                  <div style={{ fontSize: '12px', color: 'rgba(161, 161, 170, 0.8)', fontWeight: 600 }}>{vid.views} views • {vid.time} {vid.isLive ? '' : 'ago'}</div>
+                  <div style={{ fontSize: '14px', fontWeight: 800, marginBottom: '6px', lineHeight: 1.3, color: 'white' }}>{vid.title}</div>
+                  <div style={{ fontSize: '11px', color: 'rgba(161, 161, 170, 0.8)', fontWeight: 700 }}>{vid.views} views • {vid.time} {vid.isLive ? '' : 'ago'}</div>
                 </div>
               </motion.div>
             ))}
