@@ -1,0 +1,68 @@
+name: Build Unsigned IPA (iOS)
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-ios:
+    runs-on: macos-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build web app
+        run: npm run build
+
+      - name: Install Capacitor CLI
+        run: npm install -g @capacitor/cli
+
+      - name: Add iOS platform
+        run: npx cap add ios || echo "iOS already added"
+
+      - name: Sync Capacitor
+        run: npx cap sync ios
+
+      - name: Install CocoaPods
+        run: |
+          cd ios/App
+          pod install --repo-update
+
+      - name: Build unsigned IPA
+        run: |
+          xcodebuild \
+            -workspace ios/App/App.xcworkspace \
+            -scheme App \
+            -configuration Release \
+            -sdk iphoneos \
+            -archivePath $RUNNER_TEMP/App.xcarchive \
+            archive \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Export IPA
+        run: |
+          mkdir -p $RUNNER_TEMP/ipa
+          cp -r $RUNNER_TEMP/App.xcarchive/Products/Applications/App.app $RUNNER_TEMP/ipa/
+          cd $RUNNER_TEMP/ipa
+          mkdir -p Payload
+          mv App.app Payload/
+          zip -r WasafiPremium-Unsigned.ipa Payload/
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: WasafiPremium-Unsigned-IPA
+          path: /Users/runner/work/_temp/ipa/WasafiPremium-Unsigned.ipa
+          retention-days: 30
