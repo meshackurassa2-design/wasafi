@@ -21,7 +21,7 @@ jobs:
           cache: 'npm'
 
       - name: Install npm dependencies
-        run: npm ci
+        run: npm install
 
       - name: Build web app
         run: npm run build
@@ -43,7 +43,7 @@ jobs:
             -scheme App \
             -configuration Release \
             -sdk iphoneos \
-            -archivePath "$RUNNER_TEMP/WasafiPremium.xcarchive" \
+            -archivePath "wasafi.xcarchive" \
             archive \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
@@ -52,19 +52,14 @@ jobs:
 
       - name: Package IPA from archive
         run: |
-          APP_PATH="$RUNNER_TEMP/WasafiPremium.xcarchive/Products/Applications/App.app"
-          IPA_DIR="$RUNNER_TEMP/ipa_output"
-          mkdir -p "$IPA_DIR/Payload"
-          cp -r "$APP_PATH" "$IPA_DIR/Payload/App.app"
-          cd "$IPA_DIR"
-          zip -r "WasafiPremium-Unsigned.ipa" Payload/
-          echo "IPA created at: $IPA_DIR/WasafiPremium-Unsigned.ipa"
-          ls -lh "$IPA_DIR/"
+          mkdir -p build/Payload
+          cp -r wasafi.xcarchive/Products/Applications/App.app build/Payload/
+          cd build
+          zip -r WasafiPremium-Unsigned.ipa Payload/
 
       - name: Upload unsigned IPA
         uses: actions/upload-artifact@v4
         with:
           name: WasafiPremium-Unsigned-IPA
-          path: /Users/runner/work/_temp/ipa_output/WasafiPremium-Unsigned.ipa
+          path: build/WasafiPremium-Unsigned.ipa
           retention-days: 30
-          if-no-files-found: error
