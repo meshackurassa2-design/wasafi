@@ -43,9 +43,8 @@ const App = () => {
     window.addEventListener('resize', handleResize);
     try {
       if (window.Capacitor && window.Capacitor.isNativePlatform()) {
-        const { StatusBar, NavigationBar } = window.Capacitor.Plugins;
+        const { StatusBar } = window.Capacitor.Plugins;
         if (StatusBar) StatusBar.hide();
-        if (NavigationBar) NavigationBar.hide();
       }
     } catch (e) {}
     return () => window.removeEventListener('resize', handleResize);
