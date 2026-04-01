@@ -35,10 +35,6 @@ jobs:
       - name: Sync Capacitor to iOS
         run: npx cap sync ios
 
-      - name: Install CocoaPods dependencies
-        working-directory: ios/App
-        run: pod install --repo-update
-
       - name: Build iOS archive (unsigned)
         run: |
           xcodebuild \
