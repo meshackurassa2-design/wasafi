@@ -1,13 +1,45 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, Lock, LogIn, Chrome, Apple, UserCircle } from 'lucide-react';
-import { Logo } from '../App';
+import { Mail, Lock, UserCircle } from 'lucide-react';
+import { Logo } from './Logo';
+import { supabase } from '../lib/supabase';
 
 const Login = ({ onLogin }) => {
   const [isSigningUp, setIsSigningUp] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleAuth = async () => {
+    setLoading(true);
+    setError('');
+    
+    try {
+      if (isSigningUp) {
+        const { error: signUpError } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: { full_name: name }
+          }
+        });
+        if (signUpError) throw signUpError;
+        alert('Verification email sent! Please check your inbox.');
+      } else {
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+          email,
+          password
+        });
+        if (signInError) throw signInError;
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <motion.div 
@@ -48,6 +80,11 @@ const Login = ({ onLogin }) => {
       </div>
 
       <div style={{ width: '100%', maxWidth: '350px' }}>
+        {error && (
+          <div style={{ backgroundColor: 'rgba(225,29,72,0.1)', color: 'var(--primary-red)', padding: '12px', borderRadius: '8px', marginBottom: '15px', fontSize: '13px', fontWeight: 700, border: '1px solid rgba(225,29,72,0.2)' }}>
+            {error}
+          </div>
+        )}
         <AnimatePresence mode="wait">
           <motion.div
             key={isSigningUp ? 'signup' : 'login'}
@@ -121,7 +158,8 @@ const Login = ({ onLogin }) => {
 
         <motion.button
           whileTap={{ scale: 0.98 }}
-          onClick={onLogin}
+          onClick={handleAuth}
+          disabled={loading}
           style={{
             width: '100%',
             padding: '18px',
@@ -134,26 +172,14 @@ const Login = ({ onLogin }) => {
             cursor: 'pointer',
             boxShadow: '0 8px 25px rgba(225,29,72,0.4)',
             marginBottom: '30px',
-            letterSpacing: '1px'
+            letterSpacing: '1px',
+            opacity: loading ? 0.7 : 1
           }}
         >
-          {isSigningUp ? 'CREATE ACCOUNT' : 'SIGN IN'}
+          {loading ? 'PROCESSING...' : (isSigningUp ? 'CREATE ACCOUNT' : 'SIGN IN')}
         </motion.button>
 
-        <div style={{ display: 'flex', alignItems: 'center', margin: '20px 0', gap: '15px' }}>
-          <div style={{ flex: 1, height: '1px', backgroundColor: 'rgba(255,255,255,0.08)' }}></div>
-          <span style={{ fontSize: '10px', color: 'var(--text-gray)', fontWeight: 800, letterSpacing: '0.5px' }}>OR CONTINUE WITH</span>
-          <div style={{ flex: 1, height: '1px', backgroundColor: 'rgba(255,255,255,0.08)' }}></div>
-        </div>
 
-        <div style={{ display: 'flex', gap: '15px', justifyContent: 'center' }}>
-          <motion.div whileTap={{ scale: 0.9 }} className="glass-morphism" style={{ padding: '15px', borderRadius: '15px', cursor: 'pointer', border: '1px solid rgba(255,255,255,0.1)' }}>
-            <Chrome size={22} />
-          </motion.div>
-          <motion.div whileTap={{ scale: 0.9 }} className="glass-morphism" style={{ padding: '15px', borderRadius: '15px', cursor: 'pointer', border: '1px solid rgba(255,255,255,0.1)' }}>
-            <Apple size={22} />
-          </motion.div>
-        </div>
       </div>
 
       <div style={{ position: 'fixed', bottom: '40px', fontSize: '13px', color: 'var(--text-gray)', fontWeight: 500 }}>

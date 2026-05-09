@@ -1,9 +1,47 @@
 import React, { useState } from 'react';
 import { Calendar, MapPin, Ticket, ChevronRight, Users, Star, ArrowLeft, Share2, Clock, CheckCircle, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { supabase } from '../lib/supabase';
 
 const Events = () => {
+  const [dbEvents, setDbEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedEvent, setSelectedEvent] = useState(null);
+
+  React.useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('events')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (data) {
+          const mapped = data.map(item => ({
+            id: item.id,
+            title: item.title,
+            date: item.event_date,
+            time: item.event_time,
+            location: item.location,
+            price: item.price,
+            image: item.image_url,
+            status: item.status,
+            description: item.description,
+            venueInfo: item.venue_info,
+            tiers: [
+              { name: "Standard Admission", price: item.price, status: "Available" }
+            ]
+          }));
+          setDbEvents(mapped);
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchEvents();
+  }, []);
 
   const events = [
     { 
@@ -13,7 +51,7 @@ const Events = () => {
       time: "18:00 - LATE",
       location: "Samia Suluhu Hassan Stadium, Arusha", 
       price: "150,000 TZS", 
-      image: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=2070&auto=format&fit=crop",
+      image: "https://img.youtube.com/vi/CCmItvVgn6Q/maxresdefault.jpg",
       status: "VIP ONLY",
       description: `
         <p>The legendary Wasafi Festival returns for its most ambitious edition yet. Over three unforgettable nights, Arusha will become the epicenter of African music, featuring the entire WCB Wasafi roster alongside global surprise guests.</p>
@@ -33,7 +71,7 @@ const Events = () => {
       time: "20:00 - 23:30",
       location: "Mlimani City Hall, Dar Es Salaam", 
       price: "85,000 TZS", 
-      image: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?q=80&w=2070&auto=format&fit=crop",
+      image: "https://img.youtube.com/vi/qG5Ktb0lYsI/maxresdefault.jpg",
       status: "SELLING FAST",
       description: `
         <p>Witness history as Zuchu wraps up her record-breaking 'Queen of Bongo' World Tour with a spectacular homecoming finale in Dar Es Salaam.</p>
@@ -104,7 +142,7 @@ const Events = () => {
             </h2>
             <div 
               style={{ fontSize: '17px', color: 'rgba(255,255,255,0.7)', lineHeight: 1.8 }}
-              dangerouslySetInnerHTML={{ __html: event.description }}
+              dangerouslySetInnerHTML={{ __html: event?.description || 'No description provided.' }}
             />
 
             <h2 style={{ fontSize: '24px', fontWeight: 950, marginTop: '50px', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -120,7 +158,7 @@ const Events = () => {
                </h3>
                
                <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                  {event.tiers.map((tier, index) => (
+                  {event?.tiers?.map((tier, index) => (
                     <div key={index} style={{ padding: '20px', borderRadius: '20px', background: tier.status === 'Sold Out' ? 'rgba(255,255,255,0.02)' : 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.05)', opacity: tier.status === 'Sold Out' ? 0.5 : 1 }}>
                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
                           <span style={{ fontSize: '12px', fontWeight: 900, color: 'var(--text-gray)' }}>{tier.name.toUpperCase()}</span>
@@ -151,6 +189,8 @@ const Events = () => {
     </motion.div>
   );
 
+  const allEvents = [...dbEvents, ...events];
+
   return (
     <div className="fade-in" style={{ padding: '0 0 140px 0', minHeight: '100vh' }}>
       
@@ -170,7 +210,7 @@ const Events = () => {
         gridTemplateColumns: 'repeat(auto-fill, minmax(400px, 1fr))',
         gap: '40px'
       }}>
-        {events.map((event) => (
+        {allEvents.map((event) => (
           <motion.div 
             key={event.id}
             whileHover={{ y: -12 }}

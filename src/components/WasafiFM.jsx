@@ -1,13 +1,46 @@
-import React from 'react';
-import { RadioTower, Play, Pause, SkipForward, SkipBack, Heart } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { RadioTower, Play, Pause, SkipForward, SkipBack, Heart, Music as MusicIcon, Disc } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Logo } from '../App';
+import Logo from './Logo';
+import { supabase } from '../lib/supabase';
 
 const WasafiFM = ({ isPlaying, setIsPlaying }) => {
+  const [tracks, setTracks] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const audioRef = React.useRef(null);
-  const streamUrl = "/kamwambie.mp3"; 
 
-  React.useEffect(() => {
+  useEffect(() => {
+    const fetchTracks = async () => {
+      const { data } = await supabase
+        .from('radio_music')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (data && data.length > 0) {
+        setTracks(data);
+      } else {
+        // Fallback tracks
+        setTracks([
+          { 
+            title: "Kamwambie", 
+            artist: "Diamond Platnumz", 
+            audio_url: "/kamwambie.mp3", 
+            cover_url: "https://img.youtube.com/vi/qG5Ktb0lYsI/maxresdefault.jpg" 
+          }
+        ]);
+      }
+    };
+    fetchTracks();
+  }, []);
+
+  const currentTrack = tracks[currentIndex] || { 
+    title: "Connecting...", 
+    artist: "Wasafi Radio", 
+    audio_url: "/kamwambie.mp3",
+    cover_url: "https://www.wasafimedia.com/wp-content/uploads/2021/04/wasafi-media.jpg"
+  };
+
+  useEffect(() => {
     if (audioRef.current) {
       if (isPlaying) {
         audioRef.current.play().catch(e => console.error("Audio error:", e));
@@ -15,12 +48,25 @@ const WasafiFM = ({ isPlaying, setIsPlaying }) => {
         audioRef.current.pause();
       }
     }
-  }, [isPlaying]);
+  }, [isPlaying, currentTrack]);
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev + 1) % tracks.length);
+  };
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => (prev - 1 + tracks.length) % tracks.length);
+  };
 
   return (
     <div className="fade-in" style={{ padding: '20px', paddingBottom: '140px', minHeight: 'calc(100vh - 70px)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       
-      <audio ref={audioRef} src={streamUrl} preload="auto" />
+      <audio 
+        ref={audioRef} 
+        src={currentTrack.audio_url} 
+        preload="auto" 
+        onEnded={handleNext}
+      />
 
       <div style={{ marginTop: '30px', marginBottom: '40px', textAlign: 'center' }}>
          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', background: 'rgba(225,29,72,0.1)', padding: '8px 16px', borderRadius: '20px', border: '1px solid rgba(225,29,72,0.3)', marginBottom: '20px' }}>
@@ -28,20 +74,20 @@ const WasafiFM = ({ isPlaying, setIsPlaying }) => {
             <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--primary-red)', letterSpacing: '1px' }}>ON AIR NOW</span>
          </div>
          <h2 style={{ fontSize: '28px', fontWeight: 950 }}>WCB RADIO</h2>
-         <p style={{ color: 'var(--text-gray)', fontSize: '14px', marginTop: '5px', fontWeight: 700 }}>Now Playing: <span style={{ color: 'white' }}>Kamwambie</span> - Diamond Platnumz</p>
+         <p style={{ color: 'var(--text-gray)', fontSize: '14px', marginTop: '5px', fontWeight: 700 }}>Now Playing: <span style={{ color: 'white' }}>{currentTrack.title}</span> - {currentTrack.artist}</p>
       </div>
 
       {/* Rotating Album Art / Logo */}
       <motion.div 
         animate={{ rotate: isPlaying ? 360 : 0 }} 
         transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-        style={{ width: '280px', height: '280px', borderRadius: '50%', background: 'linear-gradient(135deg, var(--bg-black), #1a1a1a)', border: '4px solid #222', boxShadow: isPlaying ? '0 0 50px rgba(225,29,72,0.3)' : '0 10px 30px rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '10px', marginBottom: '50px' }}
+        style={{ width: 'clamp(200px, 70vw, 280px)', height: 'clamp(200px, 70vw, 280px)', borderRadius: '50%', background: 'linear-gradient(135deg, var(--bg-black), #1a1a1a)', border: '4px solid #222', boxShadow: isPlaying ? '0 0 50px rgba(225,29,72,0.3)' : '0 10px 30px rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '10px', marginBottom: 'clamp(30px, 8vw, 50px)' }}
       >
         <div style={{ width: '100%', height: '100%', borderRadius: '50%', overflow: 'hidden', border: '2px solid rgba(225,29,72,0.5)', position: 'relative', background: isPlaying ? 'white' : 'transparent', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           {isPlaying ? (
              <Logo size={120} />
           ) : (
-             <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=2070&auto=format&fit=crop" style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(1) opacity(0.3)' }} />
+             <img src="https://img.youtube.com/vi/qG5Ktb0lYsI/maxresdefault.jpg" style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(1) opacity(0.3)' }} />
           )}
           <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'radial-gradient(circle, transparent 20%, rgba(0,0,0,0.5) 100%)' }}></div>
         </div>

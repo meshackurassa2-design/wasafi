@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Logo } from '../App';
+import { Logo } from './Logo';
 
 const words = ["WASAFI", "MEDIA", "PREMIUM"];
 const tagline = "East Africa's #1 Entertainment Platform";
@@ -53,7 +53,17 @@ const Splash = ({ onDone }) => {
           </motion.div>
 
           {/* Word-by-word animation */}
-          <div style={{ display: 'flex', gap: '16px', position: 'relative', zIndex: 2, marginBottom: '24px' }}>
+          <div style={{ 
+            display: 'flex', 
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            gap: 'clamp(8px, 3vw, 16px)', 
+            position: 'relative', 
+            zIndex: 2, 
+            marginBottom: '24px',
+            padding: '0 20px',
+            width: '100%'
+          }}>
             {words.map((word, i) => (
               <motion.span
                 key={word}
@@ -61,9 +71,12 @@ const Splash = ({ onDone }) => {
                 animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                 transition={{ delay: i * 0.25 + 0.3, duration: 0.6, ease: 'easeOut' }}
                 style={{
-                  fontSize: '32px', fontWeight: 950, letterSpacing: '4px',
+                  fontSize: 'clamp(24px, 8vw, 32px)', 
+                  fontWeight: 950, 
+                  letterSpacing: 'clamp(2px, 1vw, 4px)',
                   color: i === 1 ? '#E11D48' : 'white',
                   textShadow: i === 1 ? '0 0 30px rgba(225,29,72,0.6)' : 'none',
+                  whiteSpace: 'nowrap'
                 }}
               >
                 {word}

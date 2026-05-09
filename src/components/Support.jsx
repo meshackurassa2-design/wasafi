@@ -11,99 +11,106 @@ const Support = () => {
   ];
 
   return (
-    <div className="fade-in" style={{ padding: '0', paddingBottom: '140px', position: 'relative', overflow: 'hidden', minHeight: '100vh', background: '#0F0F0F' }}>
+    <div className="fade-in" style={{ padding: '0', position: 'relative', overflow: 'hidden', minHeight: '100vh', background: '#0F0F0F', color: 'white' }}>
       
-      {/* Live Animated Background 'Staffs' */}
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '400px', overflow: 'hidden', zIndex: 0, pointerEvents: 'none' }}>
-        {[...Array(8)].map((_, i) => (
-          <motion.div
-            key={i}
-            animate={{ 
-              y: [0, -20, 0], 
-              rotate: [0, 360],
-              opacity: [0.1, 0.3, 0.1]
-            }}
-            transition={{ 
-              duration: 5 + i * 2, 
-              repeat: Infinity, 
-              ease: "easeInOut" 
-            }}
-            style={{ 
-              position: 'absolute',
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              width: `${20 + Math.random() * 60}px`,
-              height: `${20 + Math.random() * 60}px`,
-              background: i % 2 === 0 ? 'var(--primary-red)' : '#3B82F6',
-              borderRadius: '8px',
-              filter: 'blur(20px)',
-            }}
-          />
-        ))}
-      </div>
+      {/* Background Accents */}
+      <div style={{ position: 'absolute', top: '-100px', right: '-100px', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(225,29,72,0.05) 0%, transparent 70%)', zIndex: 0 }}></div>
+      <div style={{ position: 'absolute', bottom: '-100px', left: '-100px', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(59,130,246,0.05) 0%, transparent 70%)', zIndex: 0 }}></div>
 
-      <div style={{ position: 'relative', zIndex: 10, padding: '40px 25px' }}>
-        <header style={{ marginBottom: '40px' }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(225,29,72,0.1)', padding: '6px 12px', borderRadius: '12px', border: '1px solid rgba(225,29,72,0.2)', marginBottom: '15px' }}>
-                <HelpCircle size={14} color="var(--primary-red)" />
-                <span style={{ fontSize: '10px', fontWeight: 900, color: 'var(--primary-red)', letterSpacing: '1px' }}>WASAFI SUPPORT</span>
+      <div className="support-container" style={{ position: 'relative', zIndex: 10, maxWidth: '1400px', margin: '0 auto', padding: '60px 25px' }}>
+        
+        <header style={{ marginBottom: '60px', textAlign: 'left' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(225,29,72,0.1)', padding: '8px 16px', borderRadius: '40px', border: '1px solid rgba(225,29,72,0.2)', marginBottom: '20px' }}>
+                <HelpCircle size={16} color="var(--primary-red)" />
+                <span style={{ fontSize: '11px', fontWeight: 900, color: 'var(--primary-red)', letterSpacing: '2px' }}>HELP CENTER</span>
             </div>
-            <h2 style={{ fontSize: '32px', fontWeight: 950, marginBottom: '8px', color: 'white' }}>How can we<br/>help you today?</h2>
-            <p style={{ color: 'var(--text-gray)', fontSize: '14px', fontWeight: 600 }}>Find answers or get in touch with our team.</p>
+            <h1 style={{ fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 950, marginBottom: '15px', lineHeight: 1.1 }}>How can we help you today?</h1>
+            <p style={{ color: 'var(--text-gray)', fontSize: '18px', fontWeight: 600, maxWidth: '600px' }}>Access 24/7 premium support, manage your subscription, or troubleshoot technical issues with our dedicated Wasafi team.</p>
         </header>
 
-        {/* Quick Contact Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '40px' }}>
-            <motion.button whileTap={{ scale: 0.95 }} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '20px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'flex-start', cursor: 'pointer' }}>
-                <div style={{ background: 'var(--primary-red)', padding: '10px', borderRadius: '12px' }}>
-                    <MessageSquare size={20} color="white" />
-                </div>
-                <div style={{ fontSize: '14px', fontWeight: 800, color: 'white' }}>Live Chat</div>
-                <div style={{ fontSize: '11px', color: 'var(--text-gray)' }}>Online Now</div>
-            </motion.button>
-            <motion.button whileTap={{ scale: 0.95 }} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '20px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'flex-start', cursor: 'pointer' }}>
-                <div style={{ background: '#3B82F6', padding: '10px', borderRadius: '12px' }}>
-                    <Mail size={20} color="white" />
-                </div>
-                <div style={{ fontSize: '14px', fontWeight: 800, color: 'white' }}>Email us</div>
-                <div style={{ fontSize: '11px', color: 'var(--text-gray)' }}>Response in 2h</div>
-            </motion.button>
-        </div>
-
-        {/* FAQ Section */}
-        <div style={{ marginBottom: '30px' }}>
-            <h3 style={{ fontSize: '18px', fontWeight: 900, marginBottom: '20px', color: 'white' }}>Frequently Asked</h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {faqs.map((faq, i) => (
-                    <motion.div 
-                        key={i} 
-                        initial={false}
-                        className="glass-morphism" 
-                        style={{ padding: '18px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.03)', background: 'rgba(255,255,255,0.02)' }}
-                    >
-                        <div style={{ fontSize: '14px', fontWeight: 800, color: 'white', marginBottom: '8px' }}>{faq.q}</div>
-                        <div style={{ fontSize: '12px', color: 'var(--text-gray)', lineHeight: '1.5', fontWeight: 500 }}>{faq.a}</div>
+        <div className="support-grid" style={{ display: 'grid', gap: '40px' }}>
+            
+            {/* Left Column: Contact Methods */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                <h3 style={{ fontSize: '20px', fontWeight: 900, marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <MessageSquare size={20} color="var(--primary-red)" /> GET IN TOUCH
+                </h3>
+                
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
+                    <motion.div whileHover={{ y: -5 }} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '30px', cursor: 'pointer', transition: 'background 0.3s' }}>
+                        <div style={{ background: 'var(--primary-red)', width: '50px', height: '50px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', boxShadow: '0 10px 20px rgba(225,29,72,0.2)' }}>
+                            <MessageSquare size={24} color="white" />
+                        </div>
+                        <h4 style={{ fontSize: '18px', fontWeight: 900, marginBottom: '5px' }}>Live Concierge</h4>
+                        <p style={{ fontSize: '14px', color: 'var(--text-gray)', marginBottom: '20px' }}>Real-time assistance for account and billing issues.</p>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10B981' }}></div>
+                            <span style={{ fontSize: '12px', fontWeight: 800, color: '#10B981' }}>ONLINE NOW</span>
+                        </div>
                     </motion.div>
-                ))}
-            </div>
-        </div>
 
-        <motion.div 
-            whileHover={{ scale: 1.02 }}
-            style={{ padding: '20px', borderRadius: '20px', background: 'linear-gradient(135deg, var(--primary-red), #93122E)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px' }}
-        >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(255,255,255,0.2)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <PhoneCall size={20} color="white" />
+                    <motion.div whileHover={{ y: -5 }} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '30px', cursor: 'pointer' }}>
+                        <div style={{ background: '#3B82F6', width: '50px', height: '50px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', boxShadow: '0 10px 20px rgba(59,130,246,0.2)' }}>
+                            <Mail size={24} color="white" />
+                        </div>
+                        <h4 style={{ fontSize: '18px', fontWeight: 900, marginBottom: '5px' }}>Email Support</h4>
+                        <p style={{ fontSize: '14px', color: 'var(--text-gray)', marginBottom: '20px' }}>Send us a detailed inquiry for technical feedback.</p>
+                        <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--text-gray)' }}>AVERAGE RESPONSE: 2H</span>
+                    </motion.div>
                 </div>
-                <div>
-                    <div style={{ fontSize: '14px', fontWeight: 900, color: 'white' }}>Call Support</div>
-                    <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.8)' }}>Mon-Fri (8AM - 10PM)</div>
+
+                <motion.div 
+                    whileHover={{ scale: 1.01 }}
+                    style={{ padding: '30px', borderRadius: '24px', background: 'linear-gradient(135deg, rgba(225,29,72,0.1), rgba(15,15,15,0.1))', border: '1px solid rgba(225,29,72,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px', cursor: 'pointer' }}
+                >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+                        <div style={{ width: '50px', height: '50px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'center', alignItems: 'center', border: '1px solid rgba(255,255,255,0.1)' }}>
+                            <PhoneCall size={22} color="var(--primary-red)" />
+                        </div>
+                        <div>
+                            <div style={{ fontSize: '16px', fontWeight: 900 }}>Wasafi Priority Line</div>
+                            <div style={{ fontSize: '13px', color: 'var(--text-gray)', fontWeight: 600 }}>Toll-Free for Premium Plus Members</div>
+                        </div>
+                    </div>
+                    <ChevronRight size={24} color="var(--primary-red)" />
+                </motion.div>
+            </div>
+
+            {/* Right Column: FAQ Section */}
+            <div style={{ background: 'rgba(255,255,255,0.01)', borderRadius: '32px', padding: '40px', border: '1px solid rgba(255,255,255,0.03)' }}>
+                <h3 style={{ fontSize: '20px', fontWeight: 900, marginBottom: '30px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <ShieldCheck size={22} color="var(--primary-red)" /> FREQUENTLY ASKED
+                </h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                    {faqs.map((faq, i) => (
+                        <motion.div 
+                            key={i} 
+                            whileHover={{ background: 'rgba(255,255,255,0.04)' }}
+                            style={{ padding: '25px', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.02)', cursor: 'pointer', transition: 'all 0.3s' }}
+                        >
+                            <div style={{ fontSize: '15px', fontWeight: 900, color: 'white', marginBottom: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                {faq.q}
+                                <ChevronRight size={16} color="var(--primary-red)" />
+                            </div>
+                            <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)', lineHeight: '1.6', fontWeight: 500 }}>{faq.a}</div>
+                        </motion.div>
+                    ))}
                 </div>
             </div>
-            <ChevronRight size={20} color="white" />
-        </motion.div>
+
+        </div>
       </div>
+
+      <style dangerouslySetInnerHTML={{ __html: `
+        .support-grid {
+          grid-template-columns: 1fr;
+        }
+        @media (min-width: 1024px) {
+          .support-grid {
+            grid-template-columns: 1fr 500px;
+          }
+        }
+      `}} />
     </div>
   );
 };
