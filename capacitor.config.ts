@@ -8,7 +8,7 @@ const config: CapacitorConfig = {
     contentInset: 'always',
     backgroundColor: '#0d0d0d',
     allowsLinkPreview: false,
-    scrollEnabled: false,
+    scrollEnabled: true,
   },
   plugins: {
     StatusBar: {
